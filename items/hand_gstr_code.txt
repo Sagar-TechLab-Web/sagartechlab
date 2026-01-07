@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sagar TechLab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#f4f6f8;
+    color:#333;
+}
+
+header{
+    background:#0b3d91;
+    color:white;
+    padding:35px 15px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+}
+
+header p{
+    margin-top:10px;
+    font-size:16px;
+}
+
+section{
+    padding:30px 15px;
+    max-width:900px;
+    margin:auto;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card h2{
+    color:#0b3d91;
+    margin-bottom:10px;
+}
+
+ul{
+    padding-left:20px;
+}
+
+footer{
+    background:#0b3d91;
+    color:white;
+    text-align:center;
+    padding:15px;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Welcome to Sagar TechLab</h1>
+    <p>Code • PC Speed • Hardware Repair • Editing Tutorials</p>
+</header>
+
+<section>
+
+<div class="card">
+    <h2>Welcome 👋</h2>
+    <p>
+        Is website par aapko milegi practical aur easy language me tech knowledge.
+        Main yahan aur apne Facebook page par regular videos upload karta hoon
+        jo real problems ka solution dete hain.
+    </p>
+</div>
+
+<div class="card">
+    <h2>What You Will Learn Here</h2>
+    <ul>
+        <li>Programming & Coding (HTML, CSS, Python etc.)</li>
+        <li>PC Speed & Performance Boost Tips</li>
+        <li>Computer & Laptop Hardware Repair</li>
+        <li>Video & Photo Editing Tutorials</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h2>Why Follow This Website?</h2>
+    <p>
+        Agar aap student ho, beginner ho ya apne computer skills improve
+        karna chahte ho, toh yahan aapko simple explanation aur practical
+        knowledge milegi.
+    </p>
+</div>
+
+</section>
+
+<footer>
+    © 2026 Sagar TechLab | All Rights Reserved
+</footer>
+
+</body>
+</html>
+
+
