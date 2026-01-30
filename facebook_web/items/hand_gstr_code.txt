@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hand Gesture Controlled Particles</title>
+<meta charset="utf-8">
+<style>
+body{margin:0;overflow:hidden;background:black;}
+canvas{position:absolute;top:0;left:0;}
+#video{display:none;}
+#info{
+position:fixed;
+top:10px;left:10px;
+color:#0ff;
+font-family:Arial;
+background:rgba(0,0,0,.6);
+padding:8px;border-radius:6px;
+z-index:10;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+</head>
+
+<body>
+<div id="info">Waiting for hand…</div>
+<canvas id="c"></canvas>
+<video id="video" playsinline></video>
+
+<script>
+let scene,camera,renderer,points;
+const COUNT=8000;
+let handPos={x:1000,y:1000};
+let currentShape="fireworks";
+
+init();
+initHand();
+animate();
+
+function init(){
+scene=new THREE.Scene();
+camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);
+camera.position.z=40;
+
+renderer=new THREE.WebGLRenderer({canvas:c,antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+
+createParticles();
+
+addEventListener("resize",()=>{
+camera.aspect=innerWidth/innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(innerWidth,innerHeight);
+});
+}
+
+function createParticles(){
+const g=new THREE.BufferGeometry();
+const pos=new Float32Array(COUNT*3);
+const col=new Float32Array(COUNT*3);
+
+for(let i=0;i<COUNT;i++){
+let a=Math.random()*Math.PI*2;
+let r=Math.random()*12;
+pos[i*3]=Math.cos(a)*r;
+pos[i*3+1]=Math.sin(a)*r;
+pos[i*3+2]=(Math.random()-0.5)*6;
+
+col[i*3]=0.5+Math.random()*0.5;
+col[i*3+1]=0.5+Math.random()*0.5;
+col[i*3+2]=1;
+}
+
+g.setAttribute("position",new THREE.BufferAttribute(pos,3));
+g.setAttribute("color",new THREE.BufferAttribute(col,3));
+
+const m=new THREE.PointsMaterial({
+size:0.25,
+vertexColors:true,
+transparent:true,
+depthTest:false,
+blending:THREE.AdditiveBlending
+});
+
+points=new THREE.Points(g,m);
+scene.add(points);
+}
+
+function updateShape(){
+const pos=points.geometry.attributes.position.array;
+const col=points.geometry.attributes.color.array;
+
+for(let i=0;i<COUNT;i++){
+let t=i/COUNT*Math.PI*2;
+
+if(currentShape==="heart"){
+let x=16*Math.pow(Math.sin(t),3)*0.3;
+let y=(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*0.2;
+pos[i*3]=x;
+pos[i*3+1]=y;
+pos[i*3+2]=0;
+col[i*3]=1; col[i*3+1]=0.2; col[i*3+2]=0.4;
+}else{
+pos[i*3]=(Math.random()-0.5)*24;
+pos[i*3+1]=(Math.random()-0.5)*24;
+pos[i*3+2]=(Math.random()-0.5)*12;
+col[i*3]=0.5+Math.random()*0.5;
+col[i*3+1]=0.5+Math.random()*0.5;
+col[i*3+2]=1;
+}
+}
+
+points.geometry.attributes.position.needsUpdate=true;
+points.geometry.attributes.color.needsUpdate=true;
+}
+
+function animate(){
+requestAnimationFrame(animate);
+
+const pos=points.geometry.attributes.position.array;
+
+for(let i=0;i<COUNT;i++){
+let dx=pos[i*3]-handPos.x;
+let dy=pos[i*3+1]-handPos.y;
+let d=Math.sqrt(dx*dx+dy*dy);
+
+if(d<4){
+pos[i*3]-=dx*0.02;
+pos[i*3+1]-=dy*0.02;
+}
+}
+
+points.geometry.attributes.position.needsUpdate=true;
+renderer.render(scene,camera);
+}
+
+function initHand(){
+const video=document.getElementById("video");
+const hands=new Hands({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}`});
+
+hands.setOptions({
+maxNumHands:1,
+modelComplexity:1,
+minDetectionConfidence:0.7,
+minTrackingConfidence:0.7
+});
+
+hands.onResults(res=>{
+if(res.multiHandLandmarks && res.multiHandLandmarks.length){
+const lm=res.multiHandLandmarks[0];
+const wrist=lm[0];
+handPos.x=(wrist.x-0.5)*30;
+handPos.y=-(wrist.y-0.5)*30;
+
+const thumb=lm[4];
+const pinky=lm[20];
+const dist=Math.hypot(thumb.x-pinky.x,thumb.y-pinky.y);
+
+let next=dist<0.1?"heart":"fireworks";
+if(next!==currentShape){
+currentShape=next;
+document.getElementById("info").textContent=currentShape.toUpperCase();
+updateShape();
+}
+}
+});
+
+const cam=new Camera(video,{
+onFrame:async()=>{await hands.send({image:video});},
+width:640,height:480
+});
+cam.start();
+}
+</script>
+</body>
+</html>
