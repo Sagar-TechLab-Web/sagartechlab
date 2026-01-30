@@ -6,7 +6,7 @@
     <title>Sagar TechLab</title>
 
     <style>
-   /* ===== Base Styles ===== */
+/* ===== Base Styles ===== */
 body{
     margin:0;
     font-family:Arial, sans-serif;
@@ -31,10 +31,35 @@ header p{
     font-size:16px;
 }
 
+/* FIX: social icons */
+header img{
+    display:inline-block;
+    vertical-align:middle;
+}
+
 nav{
     font-size:x-large;
     font-weight:bold;
     color:red;
+}
+
+/* FIX: marquee image visibility */
+marquee{
+    display:block;
+    overflow:hidden;
+}
+
+fieldset{
+    border:1px solid #ccc;
+    padding:10px;
+}
+
+/* FIX: banner images */
+fieldset img{
+    display:inline-block;
+    height:250px;
+    width:auto;
+    margin:0 5px;
 }
 
 section, main{
@@ -59,12 +84,14 @@ summary{
     color:red;
     font-size:18px;
     font-weight:bold;
+    cursor:pointer;
 }
 
 .box{
     display:flex;
     gap:10px;
     margin-top:20px;
+    flex-wrap:wrap;
 }
 
 button{
@@ -93,20 +120,14 @@ footer a{
 
 .wish b{
     font-size:25px;
-    font-weight:bold;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: rgb(228,9,119);
+    color:rgb(228,9,119);
 }
 
 .wish strong{
     font-size:20px;
-    font-weight:bold;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: rgb(228,9,119);
+    color:rgb(228,9,119);
     text-decoration:overline;
 }
-
-
 
 /* ===== Follow Section ===== */
 .follow{
@@ -120,22 +141,9 @@ footer a{
 .follow h2{
     color:green;
     font-size:25px;
-    font-weight:bold;
-    font-family:'Times New Roman', Times, serif;
-    margin-bottom:10px;
 }
 
-.follow p{
-    margin:0;
-    font-size:16px;
-    color:rgb(76,109,153);
-}
-
-.follow pre{
-    margin-top:10px;
-}
-
-/* ===== Mobile Friendly Fix ===== */
+/* ===== Mobile Fix (IMPORTANT) ===== */
 @media (max-width:600px){
 
 header h1{
@@ -160,37 +168,23 @@ section, main{
 }
 
 button{
-    width:100%;
+    width:auto;
     font-size:14px;
 }
 
-pre{
-    white-space:normal;
-    text-align:center;
-}
-
+/* 🔥 CRITICAL FIX */
 img{
     max-width:100%;
     height:auto;
-    border-radius: 10px 15px;
+    display:inline-block;
 }
 
-.wish b{
-    font-size:20px;
+/* marquee image height fix */
+fieldset img{
+    height:180px;
+}
 }
 
-.wish strong{
-    font-size:16px;
-}
-
-.follow h2{
-    font-size:20px;
-}
-
-.follow p{
-    font-size:14px;
-}
-}
 
 
 
